@@ -26,6 +26,44 @@ function redirectToSignIn() {
 }
 
 onAuthStateChanged(auth, async user => {
+    if (user) {
+        const userRef = doc(db, 'users', user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+            const userData = userSnap.data();
+
+            const lastResetStr = userData.lastWeeklyReset || null; // stored string or null
+
+            // Calculate the most recent Sunday 23:59:59 (local time)
+            const now = new Date();
+            const dayOfWeek = now.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+            // Calculate difference in days to last Sunday
+            const diffToSunday = dayOfWeek; // because Sunday=0, days to subtract
+            const lastSunday = new Date(now);
+            lastSunday.setHours(23, 59, 59, 999); // set to 11:59:59.999pm today
+            lastSunday.setDate(now.getDate() - diffToSunday); // move back to Sunday
+
+            let lastResetDate = lastResetStr ? new Date(lastResetStr) : null;
+
+            // If lastWeeklyReset is missing or before last Sunday 11:59pm, reset weeklyPoints
+            if (!lastResetDate || lastResetDate < lastSunday) {
+                try {
+                    await updateDoc(userRef, {
+                        weeklyPoints: 0,
+                        lastWeeklyReset: lastSunday.toISOString(),
+                        lastUpdated: serverTimestamp()
+                    });
+                    console.log('Weekly points reset for user:', user.uid);
+                } catch (error) {
+                    console.error('Error resetting weekly points:', error);
+                }
+            } else {
+                console.log('Weekly points already reset this week');
+            }
+        }
+    }
+
     if (!user) {
         redirectToSignIn();
         return;
