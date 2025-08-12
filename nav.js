@@ -1,4 +1,3 @@
-// nav.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
@@ -66,10 +65,35 @@ export function setupNavLinks() {
             navElement.appendChild(signInLi);
             navElement.appendChild(signUpLi);
         }
+
+        // Now get all links AFTER adding auth links
+        const links = navElement.querySelectorAll('a');
+        const currentPath = window.location.pathname.split('/').pop();
+
+        // Set active class based on current URL
+        links.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === currentPath || (href === 'index.html' && currentPath === '')) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+
+        // Add click listeners to update active class dynamically
+        links.forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Remove 'active' from all links
+                links.forEach(l => l.classList.remove('active'));
+                // Add 'active' to clicked link
+                e.currentTarget.classList.add('active');
+            });
+        });
     });
 }
 
 
+// Toggle nav for hamburger menu
 const navToggle = document.getElementById('nav-toggle');
 const navUl = document.querySelector('nav ul');
 
