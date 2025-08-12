@@ -1,0 +1,42 @@
+.rank-calculator {
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.rank-calculator input {
+  padding: 0.7rem;
+  margin: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 191, 255, 0.3);
+  background-color: #141421;
+  color: #e6e6e6;
+  width: 200px;
+  font-size: 1rem;
+}
+
+.rank-calculator button {
+  padding: 0.8rem 1.5rem;
+  margin-top: 1rem;
+  background-color: #ff3131;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.rank-calculator button:hover {
+  background-color: #ff5252;
+  box-shadow: 0 0 15px rgba(255, 49, 49, 0.9);
+}
+
+.result {
+  margin-top: 2rem;
+  font-size: 1.3rem;
+}
+
+.result span {
+  font-weight: bold;
+  color: #00bfff;
+}

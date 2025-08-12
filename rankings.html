@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Phoenix Guild - Rank Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="rank-calculator.css">
+</head>
+<body>
+    <header>
+        <div class="logo">🔥 The Phoenix Guild</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="rankings.html" class="active">Rank Calculator</a></li>
+                <li><a href="history.html">History</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="rank-calculator">
+        <h1>Rank Calculator</h1>
+        <p>Enter your daily challenge results to calculate your Guild Rank and Buffs.</p>
+
+        <input type="number" id="pushups" placeholder="Push-ups" min="0">
+        <input type="number" id="situps" placeholder="Sit-ups" min="0">
+        <input type="number" id="plank" placeholder="Plank (minutes)" min="0" step="0.1">
+        <br>
+        <button id="calcBtn">Calculate Rank</button>
+
+        <div class="result" id="result"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 The Phoenix Guild — All Rights Reserved</p>
+    </footer>
+
+    <script src="rank-calculator.js"></script>
+</body>
+</html>
