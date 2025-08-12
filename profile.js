@@ -8,6 +8,10 @@ const ageSpan = document.getElementById('age');
 const rankSpan = document.getElementById('rank');
 const allTimePtsSpan = document.getElementById('allTimePts');
 const weeklyPtsSpan = document.getElementById('weeklyPts');
+const pushups = document.getElementById('task-pushups');
+const situps = document.getElementById('task-situps');
+const plank = document.getElementById('task-plank');
+
 
 const dailyForm = document.getElementById('daily-tasks-form');
 const dailyMessage = document.getElementById('daily-message');
@@ -26,6 +30,7 @@ function redirectToSignIn() {
 }
 
 onAuthStateChanged(auth, async user => {
+
     if (user) {
         const userRef = doc(db, 'users', user.uid);
         const userSnap = await getDoc(userRef);
@@ -76,6 +81,9 @@ onAuthStateChanged(auth, async user => {
         const data = userDoc.data();
         nameSpan.textContent = data.name || 'N/A';
         ageSpan.textContent = data.age || 'N/A';
+        pushups.textContent = data.pushups + ' Pushups' || 'N/A'
+        situps.textContent = data.situps + ' Situps' || 'N/A'
+        plank.textContent = data.plank + ' Plank' || 'N/A'
     } else {
         nameSpan.textContent = 'N/A';
         ageSpan.textContent = 'N/A';
@@ -93,6 +101,8 @@ onAuthStateChanged(auth, async user => {
         allTimePtsSpan.textContent = '0';
         weeklyPtsSpan.textContent = '0';
     }
+
+
 });
 
 // Helpers to update points in userRanks document:
