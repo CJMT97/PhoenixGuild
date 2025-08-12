@@ -249,10 +249,6 @@ nav {
 }
 
 /* Show nav when toggled */
-nav ul.show {
-  display: flex;
-  flex-direction: row;
-}
 
 /* Optional: reduce padding and font size on really small phones */
 @media (max-width: 400px) {
@@ -263,5 +259,46 @@ nav ul.show {
   nav ul li a {
     font-size: 1rem;
     padding: 0.4rem 0.8rem;
+  }
+}
+
+/* Hide hamburger button on wider screens (e.g., 768px and above) */
+@media (min-width: 768px) {
+  #nav-toggle {
+    display: none;
+  }
+
+  header {
+    flex-direction: column;
+  }
+
+  nav ul {
+    justify-content: center;
+  }
+
+  nav ul.show {
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+/* Show hamburger button on small screens */
+@media (max-width: 767px) {
+  #nav-toggle {
+    display: block;
+  }
+
+  nav ul.show {
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    flex-direction: row;
+  }
+
+  /* You might also want to hide the nav menu by default and show it when toggled */
+  nav ul {
+    display: none;
   }
 }
