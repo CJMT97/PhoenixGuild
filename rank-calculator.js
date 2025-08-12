@@ -67,7 +67,7 @@ calcBtn.addEventListener('click', async () => {
     displayResult(rating, rank, multiplier);
 
     try {
-        const docRef = doc(db, "userRanks", currentUser.uid);
+        const docRef = doc(db, "users", currentUser.uid);  // note 'users' collection
         await setDoc(docRef, {
             pushups,
             situps,
@@ -76,7 +76,7 @@ calcBtn.addEventListener('click', async () => {
             rank,
             multiplier,
             lastUpdated: serverTimestamp()
-        });
+        }, { merge: true });  // merge to avoid overwriting other data
         console.log("Rank data saved!");
     } catch (error) {
         console.error("Error saving rank data:", error);

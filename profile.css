@@ -1,47 +1,97 @@
 body {
   font-family: Arial, sans-serif;
-  background: #121212;
+  background: #111;
   color: #eee;
+  margin: 0;
+  padding: 0;
 }
 
-.container {
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #1e1e1e;
+header {
+  background: linear-gradient(90deg, #c00 0%, #003366 100%);
+  padding: 1rem 2rem;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+nav ul.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+nav ul.nav-links li a:hover,
+nav ul.nav-links li a.active {
+  text-decoration: underline;
+}
+
+.profile-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+section {
+  background: #222;
   border-radius: 8px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
 }
 
-h2,
-h3 {
-  margin-bottom: 15px;
-}
-
-p {
-  margin: 8px 0;
+section h2 {
+  margin-top: 0;
+  color: #f33;
 }
 
 label {
-  cursor: pointer;
-  font-size: 1.1em;
+  display: block;
+  margin: 0.5rem 0;
+}
+
+input[type="number"] {
+  width: 70px;
+  margin-left: 0.5rem;
+  background: #111;
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: white;
+  padding: 0.2rem 0.4rem;
 }
 
 button {
-  background: #e63946;
-  color: white;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #c00;
   border: none;
-  padding: 10px 15px;
   border-radius: 4px;
+  color: white;
+  font-weight: bold;
   cursor: pointer;
-  font-size: 1em;
+  transition: background 0.3s ease;
 }
 
 button:hover {
-  background: #d62828;
+  background: #a00;
 }
 
 .message {
-  margin-top: 15px;
-  font-weight: bold;
-  color: #4caf50;
+  margin-top: 0.5rem;
+  font-weight: 600;
 }

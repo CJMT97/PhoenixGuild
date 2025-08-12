@@ -1,51 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Phoenix Guild - Profile</title>
-  <link rel="stylesheet" href="profile.css" />
-    <link rel="stylesheet" href="styles.css">
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Phoenix Guild - Profile</title>
+<link rel="stylesheet" href="profile.css" />
 </head>
-
-<header>
-        <div class="logo">🔥 The Phoenix Guild</div>
-        <nav>
-  <ul id="main-nav" style="display:flex; gap:1rem; list-style:none; margin:0; padding:0;">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="rankings.html" class="active">Rank Calculator</a></li>
-    <li><a href="history.html">History</a></li>
-    <!-- auth-links will append here -->
-  </ul>
-</nav>
-    </header>
-
 <body>
-  <div class="container">
-    <h2>Your Profile</h2>
-    <div id="user-info">
-      <p><strong>Name:</strong> <span id="name">Loading...</span></p>
-      <p><strong>Age:</strong> <span id="age">Loading...</span></p>
-      <p><strong>Current Rank:</strong> <span id="rank">Loading...</span></p>
-    </div>
+<header>
+  <div class="logo">🔥 The Phoenix Guild</div>
+  <nav>
+    <ul id="main-nav" class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="rankings.html">Rank Calculator</a></li>
+      <li><a href="history.html">History</a></li>
+      <!-- Auth links inserted here by nav.js -->
+    </ul>
+  </nav>
+</header>
 
-    <h3>Daily Tasks</h3>
+<main class="profile-container">
+  <section class="user-info">
+    <h2>Your Info</h2>
+    <p><strong>Name:</strong> <span id="name">Loading...</span></p>
+    <p><strong>Age:</strong> <span id="age">Loading...</span></p>
+    <p><strong>Rank:</strong> <span id="rank">Loading...</span></p>
+    <p><strong>All-Time Points:</strong> <span id="allTimePts">0</span></p>
+    <p><strong>Weekly Points:</strong> <span id="weeklyPts">0</span></p>
+  </section>
+
+  <section class="daily-tasks">
+    <h2>Daily Tasks</h2>
     <form id="daily-tasks-form">
-        <p>Pushups: <span id="last-pushups"></span><input type="checkbox" id="task-pushups" /></p>
-        <p>Situps: <span id="last-situps"></span><input type="checkbox" id="task-pushups" /></p>
-        <p>Plank minutes: <span id="last-plank"></span> <input type="checkbox" id="task-pushups" /></p>
-
-      <button type="submit">Submit Today's Tasks</button>
+      <label><input type="checkbox" id="task-pushups" /> Pushups</label><br />
+      <label><input type="checkbox" id="task-situps" /> Situps</label><br />
+      <label><input type="checkbox" id="task-plank" /> Plank</label><br />
+        <button id="dailyTaskBtn">Submit Daily Task</button>
     </form>
-    <div class="message" id="message"></div>
-  </div>
+    <div id="daily-message" class="message"></div>
+  </section>
 
-  <script type="module" src="profile.js"></script>
+  <section class="extra-tasks">
+    <h2>Extra Tasks</h2>
+    <form id="extra-tasks-form">
+      <label>Distance walked (km): <input type="number" id="distanceKm" min="0" step="0.1" /></label><br />
+      <label>Gym session time (minutes): <input type="number" id="gymMins" min="0" step="1" /></label><br />
+      <label>Sport time (minutes): <input type="number" id="sportMins" min="0" step="1" /></label><br />
+      <label>Cycling class attended: <input type="checkbox" id="cyclingClass" /></label><br />
+      <button type="submit">Submit Extra Tasks</button>
+    </form>
+    <div id="extra-message" class="message"></div>
+  </section>
+
+  <section class="debuffs">
+    <h2>Debuffs</h2>
+    <form id="debuffs-form">
+      <label><input type="checkbox" id="takeaway" /> Take aways (-1 Point)</label><br />
+      <label><input type="checkbox" id="lateWake" /> Wake up after 9am (-1 Point)</label><br />
+      <label><input type="checkbox" id="noChore" /> No weekly chore (-1 Point)</label><br />
+      <button type="submit">Submit Debuffs</button>
+    </form>
+    <div id="debuffs-message" class="message"></div>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2025 The Phoenix Guild — All Rights Reserved</p>
+</footer>
+
+<script type="module" src="firebase-config.js"></script>  
 <script type="module" src="nav.js"></script>
-<script type="module">
-  import { setupNavLinks } from './nav.js';
-  setupNavLinks();
-</script>
-
+<script type="module" src="profile.js"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCy-a9fSGbt70MLUfH_Xg4cSXThyU7USv8",
@@ -13,6 +14,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 const form = document.getElementById('signin-form');
 const errorMsg = document.getElementById('error-msg');
@@ -21,15 +23,31 @@ form.addEventListener('submit', async (e) => {
     e.preventDefault();
     errorMsg.textContent = '';
 
-    const email = form.email.value;
+    const email = form.email.value.trim();
     const password = form.password.value;
 
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        // Signed in
+        const user = userCredential.user;
+
+        // Check if user doc exists, create if not
+        const userDocRef = doc(db, 'users', user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        if (!userDocSnap.exists()) {
+            await setDoc(userDocRef, {
+                email: user.email,
+                createdAt: new Date().toISOString(),
+                points: 0,
+                weeklyPoints: 0,
+                name: "",
+                age: null,
+                rank: "No rank yet"
+            });
+        }
+
         alert('Sign-in successful!');
-        // Redirect to rank calculator or home page
         window.location.href = 'rankings.html';
+
     } catch (error) {
         errorMsg.textContent = error.message;
     }
