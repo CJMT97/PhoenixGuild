@@ -188,3 +188,80 @@ footer {
   color: #888;
   border-top: 1px solid rgba(0, 191, 255, 0.2);
 }
+
+/* Responsive Navigation */
+
+/* Hide the nav links on small screens initially */
+nav ul {
+  flex-wrap: nowrap;
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-wrap: wrap;
+    padding: 1rem;
+  }
+
+  .logo {
+    flex: 1 1 100%;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  nav ul {
+    flex-direction: column;
+    width: 100%;
+    display: none; /* hide by default */
+    background: #1a1a2e;
+    border-radius: 6px;
+    padding: 1rem 0;
+  }
+
+  nav ul li {
+    margin: 0.5rem 0;
+    text-align: center;
+  }
+
+  nav ul li a {
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+    display: block;
+  }
+
+  /* Hamburger button styles */
+  #nav-toggle {
+    display: block;
+    cursor: pointer;
+    font-size: 1.8rem;
+    color: #00bfff;
+    background: none;
+    border: none;
+    position: absolute;
+    top: 1.2rem;
+    right: 1.5rem;
+    z-index: 999;
+  }
+}
+
+nav {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Show nav when toggled */
+nav ul.show {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Optional: reduce padding and font size on really small phones */
+@media (max-width: 400px) {
+  .logo {
+    font-size: 1.3rem;
+  }
+
+  nav ul li a {
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
