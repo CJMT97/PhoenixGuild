@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Phoenix Guild - Sign In</title>
+  <link rel="stylesheet" href="signin.css" />
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<header>
+        <div class="logo">🔥 The Phoenix Guild</div>
+        <nav>
+  <ul id="main-nav" style="display:flex; gap:1rem; list-style:none; margin:0; padding:0;">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="rankings.html" class="active">Rank Calculator</a></li>
+    <li><a href="history.html">History</a></li>
+    <!-- auth-links will append here -->
+  </ul>
+</nav>
+    </header>
+
+<body>
+  <div class="container">
+    <h2>Sign In - Phoenix Guild</h2>
+    <form id="signin-form">
+      <label for="email">Email:</label>
+      <input id="email" type="email" required />
+
+      <label for="password">Password:</label>
+      <input id="password" type="password" required minlength="6" />
+
+      <button type="submit">Sign In</button>
+    </form>
+    <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+    <div class="error" id="error-msg"></div>
+  </div>
+
+  <script type="module" src="signin.js"></script>
+  <script type="module" src="nav.js"></script>
+<script type="module">
+  import { setupNavLinks } from './nav.js';
+  setupNavLinks();
+</script>
+
+</body>
+</html>

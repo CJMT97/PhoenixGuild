@@ -5,17 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Phoenix Guild</title>
     <link rel="stylesheet" href="styles.css">
+
 </head>
 <body>
-    <header>
+   <header>
         <div class="logo">🔥 The Phoenix Guild</div>
         <nav>
-            <ul>
-                <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="rankings.html">Rankings</a></li>
-                <li><a href="history.html">History</a></li>
-            </ul>
-        </nav>
+  <ul id="main-nav" style="display:flex; gap:1rem; list-style:none; margin:0; padding:0;">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="rankings.html" class="active">Rank Calculator</a></li>
+    <li><a href="history.html">History</a></li>
+    <!-- auth-links will append here -->
+  </ul>
+</nav>
     </header>
 
     <main>
@@ -44,5 +46,11 @@
     <footer>
         <p>&copy; 2025 The Phoenix Guild — All Rights Reserved</p>
     </footer>
+    <script type="module" src="nav.js"></script>
+<script type="module">
+  import { setupNavLinks } from './nav.js';
+  setupNavLinks();
+</script>
+
 </body>
 </html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Phoenix Guild - Sign Up</title>
+  <link rel="stylesheet" href="signup.css" />
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<header>
+        <div class="logo">🔥 The Phoenix Guild</div>
+        <nav>
+  <ul id="main-nav" style="display:flex; gap:1rem; list-style:none; margin:0; padding:0;">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="rankings.html" class="active">Rank Calculator</a></li>
+    <li><a href="history.html">History</a></li>
+    <!-- auth-links will append here -->
+  </ul>
+</nav>
+    </header>
+
+<body>
+  <div class="container">
+    <h2>Sign Up - Phoenix Guild</h2>
+    <form id="signup-form">
+      <label for="email">Email:</label>
+      <input id="email" type="email" required />
+
+      <label for="password">Password:</label>
+      <input id="password" type="password" required minlength="6" />
+
+      <label for="name">Name:</label>
+      <input id="name" type="text" required />
+
+      <label for="age">Age:</label>
+      <input id="age" type="number" required min="13" max="120" />
+
+      <button type="submit">Sign Up</button>
+    </form>
+    <div class="error" id="error-msg"></div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script type="module" src="signup.js"></script>
+  <script type="module" src="nav.js"></script>
+<script type="module">
+  import { setupNavLinks } from './nav.js';
+  setupNavLinks();
+</script>
+
+</body>
+</html>
