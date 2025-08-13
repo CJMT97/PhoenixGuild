@@ -98,11 +98,3 @@ export function setupNavLinks() {
         });
     });
 }
-
-// Toggle nav for hamburger menu
-const navToggle = document.getElementById('nav-toggle');
-const navUl = document.querySelector('nav ul');
-
-navToggle.addEventListener('click', () => {
-    navUl.classList.toggle('show');
-});
