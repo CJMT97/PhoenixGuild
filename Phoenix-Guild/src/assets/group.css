@@ -1,0 +1,138 @@
+/* Groups Page CSS - Matching Your Site Color Scheme */
+
+.groups-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 25px;
+  background: linear-gradient(145deg, #0d0d14, #1a1a2e);
+  border: 1px solid #00bfff33;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  color: #e6e6e6;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+.groups-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #00bfff;
+  text-shadow: 0 0 8px rgba(0, 191, 255, 0.7);
+}
+
+.group-create,
+.group-join-name {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.group-create input,
+.group-join-name input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  flex: 1;
+  max-width: 300px;
+  background-color: #0b0b12;
+  color: #e6e6e6;
+}
+
+.group-create button,
+.group-join-name button,
+.groups-container ul button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  background-color: #ff3131;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.group-create button:hover,
+.group-join-name button:hover,
+.groups-container ul button:hover {
+  background-color: #ff5252;
+  box-shadow: 0 0 10px rgba(255, 49, 49, 0.7);
+}
+
+.groups-container h3 {
+  margin-top: 30px;
+  margin-bottom: 12px;
+  color: #00bfff;
+  text-shadow: 0 0 6px rgba(0, 191, 255, 0.6);
+}
+
+.groups-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.groups-container ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0b0b12;
+  border: 1px solid #00bfff33;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.leaderboard {
+  margin-top: 30px;
+  padding: 20px;
+  background: #0b0b12;
+  border: 1px solid #00bfff33;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.leaderboard h3 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #ff3131;
+  text-shadow: 0 0 8px rgba(255, 49, 49, 0.6);
+}
+
+.leaderboard ol {
+  padding-left: 20px;
+}
+
+.leaderboard li {
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 16px;
+  color: #e6e6e6;
+}
+
+/* Highlight top 3 leaderboard spots */
+.leaderboard li:nth-child(1) {
+  color: #ffd700; /* gold */
+  font-weight: 700;
+}
+.leaderboard li:nth-child(2) {
+  color: #c0c0c0; /* silver */
+  font-weight: 700;
+}
+.leaderboard li:nth-child(3) {
+  color: #cd7f32; /* bronze */
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .group-create,
+  .group-join-name {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .group-create input,
+  .group-join-name input {
+    max-width: 100%;
+  }
+}

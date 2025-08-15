@@ -9,12 +9,13 @@ import Footer from "./Footer";
 import SignIn from "./Signin"; // Adjust path accordingly
 import Profile from "./Profile";
 import Signup from "./Signup";
+import Groups from "./Groups";
 
 import "./assets/styles.css";
 
 export default function App() {
   return (
-    <Router>
+    <Router basename="PhoenixGuild">
       <Header />
       <Routes>
         <Route path="/" element={<Main />} />
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/groups" element={<Groups />} />
       </Routes>
       <Footer />
     </Router>

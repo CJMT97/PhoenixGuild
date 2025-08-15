@@ -4,9 +4,9 @@ import { NavLink, useNavigate } from "react-router-dom";
 export default function Header() {
   const [navOpen, setNavOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [playerReady, setPlayerReady] = useState(false);
   const navigate = useNavigate();
 
-  // Hold auth instance
   const [auth, setAuth] = useState(null);
 
   useEffect(() => {
@@ -38,6 +38,27 @@ export default function Header() {
     }
 
     initFirebase();
+
+    // Load YouTube IFrame API
+    const tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.body.appendChild(tag);
+
+    window.onYouTubeIframeAPIReady = () => {
+      new window.YT.Player("yt-player", {
+        height: "0",
+        width: "0",
+        videoId: "VhEoCOWUtcU", // Kanye West - Runaway
+        playerVars: {
+          autoplay: 0, // starts after user clicks
+          loop: 1,
+          playlist: "VhEoCOWUtcU", // same as videoId to loop
+        },
+        events: {
+          onReady: () => setPlayerReady(true),
+        },
+      });
+    };
   }, []);
 
   const toggleNav = () => setNavOpen((open) => !open);
@@ -49,6 +70,14 @@ export default function Header() {
     );
     await signOut(auth);
     navigate("/signin");
+  };
+
+  const handlePlayMusic = () => {
+    if (!window.YT) return;
+    const player = window.YT.get("yt-player"); // get the player
+    if (player && playerReady) {
+      player.playVideo(); // starts playback on user click
+    }
   };
 
   return (
@@ -81,6 +110,15 @@ export default function Header() {
               onClick={() => setNavOpen(false)}
             >
               Rank Calculator
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/groups"
+              className={({ isActive }) => (isActive ? "active" : undefined)}
+              onClick={() => setNavOpen(false)}
+            >
+              Groups
             </NavLink>
           </li>
           <li>
@@ -153,8 +191,19 @@ export default function Header() {
               </li>
             </>
           )}
+          <li>
+            <button
+              type="button"
+              onClick={handlePlayMusic}
+              disabled={!playerReady}
+            >
+              Play Music
+            </button>
+          </li>
         </ul>
       </nav>
+      {/* Invisible YouTube player */}
+      <div id="yt-player"></div>
     </header>
   );
 }

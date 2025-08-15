@@ -12,6 +12,7 @@
   color: #e6e6e6;
   width: 200px;
   font-size: 1rem;
+  box-sizing: border-box;
 }
 
 .rank-calculator button {
@@ -46,8 +47,30 @@
   justify-content: center;
   gap: 1rem;
   margin-bottom: 1rem;
+  flex-wrap: wrap; /* allow inputs to wrap on small screens */
 }
 
 .input-row input {
-  width: 150px; /* optional, to make inputs consistent size */
+  width: 150px; /* default for desktop */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .rank-calculator {
+    padding: 2rem 1rem;
+  }
+
+  .input-row input {
+    width: 100%; /* full width on small screens */
+    max-width: 300px; /* optional max width */
+  }
+
+  .rank-calculator button {
+    width: 100%; /* full width button */
+    max-width: 300px;
+  }
+
+  .result {
+    font-size: 1.1rem;
+  }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { auth, db } from "./assets/firebase-config"; // your firebase initialized exports
@@ -14,6 +14,219 @@ import {
   serverTimestamp,
   increment,
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import "./assets/profile.css";
+
+import dragonGif from "./pixelart/Aqua Drake/AquaDrake.gif";
+import castle from "./pixelart/castle.png";
+
+const MAX_ENERGY = 10;
+
+async function initCompanionEnergy(userId) {
+  const ref = doc(db, "users", userId);
+  const snap = await getDoc(ref);
+
+  if (snap.exists()) {
+    const data = snap.data();
+    const lastUpdate = data.lastEnergyUpdate?.toDate().getTime() || Date.now();
+    const hoursPassed = Math.floor(
+      (Date.now() - lastUpdate) / (1000 * 60 * 60)
+    );
+
+    let newEnergy = data.companionEnergy ?? MAX_ENERGY;
+    if (hoursPassed > 1) {
+      newEnergy = Math.max(newEnergy - hoursPassed, 0);
+    }
+
+    await updateDoc(ref, {
+      companionEnergy: newEnergy,
+      lastEnergyUpdate: serverTimestamp(),
+    });
+
+    return newEnergy;
+  } else {
+    await setDoc(ref, {
+      companionEnergy: MAX_ENERGY,
+      lastEnergyUpdate: serverTimestamp(),
+    });
+    return MAX_ENERGY;
+  }
+}
+
+async function drainCompanionEnergy(userId) {
+  const ref = doc(db, "users", userId);
+  const snap = await getDoc(ref);
+
+  if (snap.exists()) {
+    const currentEnergy = snap.data().companionEnergy ?? MAX_ENERGY;
+    if (currentEnergy > 0) {
+      await updateDoc(ref, {
+        companionEnergy: currentEnergy - 1,
+        lastEnergyUpdate: serverTimestamp(),
+      });
+    }
+  }
+}
+
+export function DragonAvatar({ size = 100 }) {
+  const [energy, setEnergy] = useState(0);
+  const [position, setPosition] = useState({ x: 100, y: 100 });
+  const [direction, setDirection] = useState({ x: 1, y: 1 });
+  const pauseRef = useRef(false);
+  const containerRef = useRef(null);
+  const userIdRef = useRef(null);
+
+  // Auth listener + energy sync
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        userIdRef.current = user.uid;
+        const startingEnergy = await initCompanionEnergy(user.uid);
+        setEnergy(startingEnergy);
+
+        // Check every hour and update Firebase
+        const hourTimer = setInterval(async () => {
+          await drainCompanionEnergy(user.uid);
+          setEnergy((prev) => Math.max(prev - 1, 0));
+        }, 1000 * 60 * 60);
+
+        return () => clearInterval(hourTimer);
+      }
+    });
+    return unsub;
+  }, []);
+
+  // Wandering movement
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (energy <= 0 || pauseRef.current || !containerRef.current) return;
+
+      const containerWidth = containerRef.current.offsetWidth;
+      const containerHeight = containerRef.current.offsetHeight;
+      const speed = 1 + energy * 0.5;
+
+      setPosition((prev) => {
+        let newX = prev.x + direction.x * speed;
+        let newY = prev.y + direction.y * speed;
+
+        // Bounce off edges
+        if (newX < 0 || newX > containerWidth - size) {
+          setDirection((d) => ({ ...d, x: -d.x }));
+          newX = Math.max(0, Math.min(containerWidth - size, newX));
+        }
+        if (newY < 0 || newY > containerHeight - size) {
+          setDirection((d) => ({ ...d, y: -d.y }));
+          newY = Math.max(0, Math.min(containerHeight - size, newY));
+        }
+
+        return { x: newX, y: newY };
+      });
+
+      // Random pause
+      if (Math.random() < 0.01) {
+        pauseRef.current = true;
+        setTimeout(() => {
+          pauseRef.current = false;
+        }, 500 + Math.random() * 1500);
+      }
+    }, 16);
+
+    return () => clearInterval(interval);
+  }, [energy, direction, size]);
+
+  return (
+    <>
+      {/* Image container */}
+      <div
+        ref={containerRef}
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "400px",
+          imageRendering: "pixelated",
+          overflow: "hidden",
+        }}
+      >
+        <img
+          src={castle}
+          alt="Castle Background"
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
+        <img
+          src={dragonGif}
+          alt="Dragon"
+          style={{
+            position: "absolute",
+            left: position.x,
+            top: position.y,
+            width: size,
+            height: size,
+            transform: direction.x < 0 ? "scaleX(-1)" : "scaleX(1)",
+          }}
+        />
+      </div>
+
+      {/* Energy bar below the image */}
+      <div
+        style={{
+          width: "80%",
+          height: "20px",
+          backgroundColor: "#444", // empty bar
+          borderRadius: "10px",
+          margin: "10px auto 0 auto",
+          overflow: "hidden",
+          position: "relative",
+        }}
+      >
+        <div
+          style={{
+            width: `${(energy / MAX_ENERGY) * 100}%`,
+            height: "100%",
+            backgroundColor: "red",
+            transition: "width 0.2s ease",
+          }}
+        />
+        <span
+          style={{
+            position: "absolute",
+            width: "100%",
+            textAlign: "center",
+            top: 0,
+            fontSize: "12px",
+            color: "white",
+          }}
+        >
+          Energy
+        </span>
+      </div>
+    </>
+  );
+}
+
+// Pass the user to the function
+const updateCompanionEnergy = async (points, user) => {
+  if (!user) return;
+  const userRef = doc(db, "users", user.uid);
+  const userSnap = await getDoc(userRef);
+  if (!userSnap.exists()) return;
+
+  const data = userSnap.data();
+  const currentEnergy = data.companionEnergy ?? 10;
+
+  const newEnergy = currentEnergy + points; // no cap in Firebase
+
+  await updateDoc(userRef, {
+    companionEnergy: newEnergy,
+    lastUpdated: serverTimestamp(),
+  });
+
+  return newEnergy; // optional
+};
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -34,6 +247,12 @@ export default function Profile() {
     plank: false,
   });
   const [dailyMessage, setDailyMessage] = useState("");
+
+  // === Dragon State ===
+  const [dragonColor, setDragonColor] = useState("#ff6666");
+  const [dragonSize, setDragonSize] = useState(30);
+  const [dragonHappiness, setDragonHappiness] = useState(50);
+  const [dragonEnergy, setDragonEnergy] = useState(50);
 
   // Extra tasks state
   const [extraTasks, setExtraTasks] = useState({
@@ -93,10 +312,18 @@ export default function Profile() {
         setUserInfo({
           name: data.name || "N/A",
           age: data.age || "N/A",
-          rank: data.rank || "No rank yet",
+          rank: data.lastCalculatedRank?.rankZone || "No rank yet",
           allTimePts: data.points ?? 0,
           weeklyPts: data.weeklyPoints ?? 0,
         });
+
+        // Optionally load dragon state from firestore
+        if (data.dragon) {
+          setDragonColor(data.dragon.color || "#ff6666");
+          setDragonSize(data.dragon.size || 150);
+          setDragonHappiness(data.dragon.happiness ?? 50);
+          setDragonEnergy(data.dragon.energy ?? 50);
+        }
       }
     });
 
@@ -140,6 +367,7 @@ export default function Profile() {
         lastUpdated: serverTimestamp(),
       });
       setDailyMessage("Daily task submitted! +5 points.");
+      await updateCompanionEnergy(5, currentUser);
       setDailyTasks({ pushups: false, situps: false, plank: false });
       setUserInfo((prev) => ({
         ...prev,
@@ -200,6 +428,8 @@ export default function Profile() {
       }
 
       setExtraMessage(`Extra tasks submitted (+${totalExtraPts} points)!`);
+      await updateCompanionEnergy(totalExtraPts, currentUser);
+
       setExtraTasks({
         distanceKm: "",
         gymMins: "",
@@ -221,6 +451,16 @@ export default function Profile() {
   const handleDebuffsChange = (e) => {
     const { name, checked } = e.target;
     setDebuffs((prev) => ({ ...prev, [name]: checked }));
+  };
+
+  // Save dragon state to firestore
+  const saveDragonState = async (updates) => {
+    if (!currentUser) return;
+    const userRef = doc(db, "users", currentUser.uid);
+    await updateDoc(userRef, {
+      dragon: updates,
+      lastUpdated: serverTimestamp(),
+    });
   };
 
   const handleDebuffsSubmit = async (e) => {
@@ -266,6 +506,8 @@ export default function Profile() {
       }
 
       setDebuffsMessage(`Debuffs submitted (${debuffPoints} points)!`);
+      await updateCompanionEnergy(debuffPoints, currentUser);
+
       setDebuffs({
         takeaway: false,
         lateWake: false,
@@ -285,6 +527,7 @@ export default function Profile() {
   return (
     <>
       <main className="profile-container">
+        {/* === User Info === */}
         <section className="user-info">
           <h2>Your Info</h2>
           <p>
@@ -301,6 +544,19 @@ export default function Profile() {
           </p>
           <p>
             <strong>Weekly Points:</strong> <span>{userInfo.weeklyPts}</span>
+          </p>
+        </section>
+
+        {/* === Dragon Companion === */}
+        <section className="dragon-companion">
+          <h2>Your Dragon Companion</h2>
+          <DragonAvatar />
+
+          <p>
+            Your companion loves to fly around his castle, but over time he runs
+            out of energy. To replenish it, he gains energy from points you
+            earn—but don’t worry, this doesn’t affect your weekly point total.
+            For every point you gain, his energy is restored by 1/10.
           </p>
         </section>
 
